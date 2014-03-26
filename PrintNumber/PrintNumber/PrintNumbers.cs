@@ -15,6 +15,9 @@ namespace PrintNumber
 		[TestCase(24, "twenty four")]
 		[TestCase(30, "thirty")]
 		[TestCase(35, "thirty five")]
+		[TestCase(100, "one hundred")]
+		[TestCase(110, "one hundred and ten")]
+		[TestCase(556, "five hundred and fifty six")]
 		public void ToEnglishShouldReturnNumberInText(int number, string numberInText)
 		{
 			ToEnglish(number).Should().Be(numberInText);
@@ -36,16 +39,29 @@ namespace PrintNumber
 				    {3, "three"},
 					{4, "four"},
 					{5, "five"},
+					{10, "ten"},
+					{6, "six"},
 			    };
+			if (number >= 100)
+			{
+				int hundredValue = number / 100;
+				numberTextBuilder.Append(numberTextBuilder.Length > 1 ? " " : "");
+				numberTextBuilder.Append(numbers[hundredValue]);
+				numberTextBuilder.Append(" hundred");
+				number %= 100;
+			}
+
 			if (number >= 20)
 			{
 				int value = number / 10;
+				numberTextBuilder.Append(numberTextBuilder.Length > 1 ? " and " : "");
 				numberTextBuilder.Append(tenth[value * 10]);
 				number %= 10;
 			}
 			if (number != 0)
 			{
 				numberTextBuilder.Append(numberTextBuilder.Length > 1 ? " " : "");
+				numberTextBuilder.Append(numberTextBuilder.Length > 1 && number > 9 ? "and " : "");
 				numberTextBuilder.Append(numbers[number]);
 			}
 
